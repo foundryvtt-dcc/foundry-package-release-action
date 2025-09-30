@@ -1,4 +1,4 @@
-# GitHub Action to Update Manifest in `main` After a Release is Published
+# GitHub Action to Update FoundryVTT.com Website after a Release is Published
 
 This GitHub Action updates the foundryvtt.com website with a new version of a package after a GitHub release is published.
 
