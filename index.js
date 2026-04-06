@@ -57,9 +57,9 @@ async function updatePackage() {
         const compatibilityVerifiedFromManifest = manifestFileData.compatibility?.verified
         console.debug(compatibilityVerifiedFromManifest)
 
-        let releaseNotesUrl = `https://github.com/${owner}/${repo}/releases/tag/v${version}`
-        if (manifestFileName === 'module.json') {
-            releaseNotesUrl = `https://github.com/foundryvtt-dcc/dcc-content/blob/main/${repo}/v${version}/RELEASE_NOTES.md`
+        let releaseNotesUrl = latestRelease?.data?.html_url
+        if (!releaseNotesUrl) {
+            releaseNotesUrl = `https://github.com/${owner}/${repo}/releases/tag/v${version}`
         }
         console.debug(releaseNotesUrl)
 
