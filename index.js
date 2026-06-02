@@ -7,6 +7,7 @@ const actionToken = core.getInput('actionToken')
 const dryRun = core.getInput('dryRun')
 const foundryToken = core.getInput('foundryToken')
 const manifestFileName = core.getInput('manifestFileName')
+const publicRepositoryAndBranch = core.getInput('publicRepositoryAndBranch') || 'foundryvtt-dcc/dcc-content/main'
 const octokit = github.getOctokit(actionToken)
 const owner = github.context.payload.repository.owner.login
 const repo = github.context.payload.repository.name
@@ -67,6 +68,19 @@ async function updatePackage () {
     console.debug(dryRun)
     console.debug(dryRunBoolean)
 
+    // Foundry's Release API expects a VERSION-SPECIFIC manifest URL — not the
+    // package's own `manifest` field, which now points at a stable "latest" URL
+    // for ongoing update detection. Reconstruct the per-version URL here.
+    // Protected packages are auto-detected from the released manifest itself
+    // (their asset carries `protected: true`); their source repo is private, so
+    // the public versioned mirror in the content repo is used instead of the
+    // GitHub release asset.
+    let releaseManifestUrl = `https://github.com/${owner}/${repo}/releases/download/v${version}/${manifestFileName}`
+    if (manifestFileData.protected === true) {
+      releaseManifestUrl = `https://raw.githubusercontent.com/${publicRepositoryAndBranch}/${repo}/v${version}/${manifestFileName}`
+    }
+    console.debug(releaseManifestUrl)
+
     const foundryResponse = await fetch('https://api.foundryvtt.com/_api/packages/release_version/', {
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +92,7 @@ async function updatePackage () {
         'dry-run': dryRunBoolean,
         release: {
           version,
-          manifest: manifestFileData.manifest,
+          manifest: releaseManifestUrl,
           notes: releaseNotesUrl,
           compatibility: {
             minimum: compatibilityMinFromManifest,
