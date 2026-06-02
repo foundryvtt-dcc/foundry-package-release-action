@@ -29,6 +29,10 @@ inputs:
     description: 'Name of the Foundry Manifest File, either system.json or module.json'
     required: true
     default: 'module.json'
+  publicRepositoryAndBranch:
+    description: 'owner/repo/branch of the public content repository (used for protected packages, auto-detected from the manifest)'
+    required: false
+    default: 'foundryvtt-dcc/dcc-content/main'
   versionFileName:
     description: 'Name of the file in the release that contains the version number'
     required: true
