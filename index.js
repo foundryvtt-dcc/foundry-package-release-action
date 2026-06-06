@@ -48,6 +48,12 @@ async function updatePackage() {
         const version = manifestFileData.version
         console.debug(version)
 
+        // The Foundry package id comes from the manifest, not the GitHub repo
+        // name — they can differ (e.g. repo "fvtt-condition-lab" vs package
+        // "condition-lab"). Sending the wrong id yields a 403 from Foundry.
+        const packageId = manifestFileData.id || repo
+        console.debug(packageId)
+
         const compatibilityMaxFromManifest = manifestFileData.compatibility?.maximum
         console.debug(compatibilityMaxFromManifest)
 
@@ -75,7 +81,7 @@ async function updatePackage() {
             },
             method: "POST",
             body: JSON.stringify({
-                "id": repo,
+                "id": packageId,
                 "dry-run": dryRunBoolean,
                 "release": {
                     "version": version,
