@@ -81,7 +81,11 @@ async function updatePackage () {
     }
     console.debug(releaseManifestUrl)
 
-    const foundryResponse = await fetch('https://api.foundryvtt.com/_api/packages/release_version/', {
+    // NOTE: must be foundryvtt.com, NOT api.foundryvtt.com. The old lambda host
+    // (api.foundryvtt.com) registers the version but does NOT update Foundry's
+    // package cache, so the in-app installer never advances to the new version
+    // (confirmed by Foundry support 2026-06-18). foundryvtt.com updates the cache.
+    const foundryResponse = await fetch('https://foundryvtt.com/_api/packages/release_version/', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: foundryToken
