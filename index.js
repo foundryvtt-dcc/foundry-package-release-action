@@ -113,7 +113,9 @@ async function updatePackage () {
       console.log(foundryResponse.statusText)
       console.debug(foundryResponseData)
     } else {
-      core.setFailed(foundryResponse.statusText)
+      const errorBody = await foundryResponse.text()
+      console.log(errorBody)
+      core.setFailed(`${foundryResponse.statusText}: ${errorBody}`)
     }
   } catch (error) {
     core.setFailed(error.message)
