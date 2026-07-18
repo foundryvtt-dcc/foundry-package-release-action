@@ -30,7 +30,7 @@ inputs:
     required: true
     default: 'module.json'
   publicRepositoryAndBranch:
-    description: 'owner/repo/branch of the public content repository (used for protected packages, auto-detected from the manifest)'
+    description: 'owner/repo/branch of the public content repository (used for the manifest URL of protected packages and the release notes URL of modules)'
     required: false
     default: 'foundryvtt-dcc/dcc-content/main'
   versionFileName:

@@ -59,7 +59,8 @@ async function updatePackage () {
 
     let releaseNotesUrl = `https://github.com/${owner}/${repo}/releases/tag/v${version}`
     if (manifestFileName === 'module.json') {
-      releaseNotesUrl = `https://github.com/foundryvtt-dcc/dcc-content/blob/main/${repo}/v${version}/RELEASE_NOTES.md`
+      const [contentOwner, contentRepo, ...contentBranch] = publicRepositoryAndBranch.split('/')
+      releaseNotesUrl = `https://github.com/${contentOwner}/${contentRepo}/blob/${contentBranch.join('/')}/${repo}/v${version}/RELEASE_NOTES.md`
     }
     console.debug(releaseNotesUrl)
 
